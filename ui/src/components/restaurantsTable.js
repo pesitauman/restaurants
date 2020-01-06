@@ -54,5 +54,5 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-// export default restaurantList;
+
 export default connect(mapStateToProps, mapDispatchToProps)(RestaurantsTable);

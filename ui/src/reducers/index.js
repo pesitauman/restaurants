@@ -1,7 +1,7 @@
-export function visibilityFilter(state = '*', action) {
+export function visibilityFilter(state = '', action) {
   switch (action.type) {
     case 'SET_VISIBILITY_FILTER':
-      return action.filter
+      return action.data.filter
     default:
       return state
   }

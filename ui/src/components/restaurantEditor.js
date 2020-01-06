@@ -9,9 +9,24 @@ import {
  } from '../actions'
 
 class RestaurantEditor extends React.Component {
+
+  onNameChange = (event) => this.props.onPropChange({ Name: event.target.value });
+  onTypeChange = (event) => this.props.onPropChange({ Type: event.target.value });
+  onPhoneChange = (event) => this.props.onPropChange({ Phone: event.target.value });
+  onAddressChange = (address) => this.props.onPropChange({ address });
+
+  onAnyClick = (event, eventName) => {
+    event.preventDefault();
+    this.props[eventName](this.props.restaurant)
+  }
+
+  onUpdate = (event) => this.onAnyClick(event, 'onUpdate');
+  onDelete = (event) => this.onAnyClick(event, 'onDelete');
+  onCancel = (event) => this.onAnyClick(event, 'onCancel');
+
   render() {
-    if(!this.props.restaurant) return '';
-    return (
+    // if(!this.props.restaurant) return '';
+    return this.props.restaurant && (
       <div>
       <form>
         <h3>Restaurant Editor</h3>
@@ -19,33 +34,33 @@ class RestaurantEditor extends React.Component {
           <label>Name</label>
           <input
             value={this.props.restaurant.Name}
-            onChange={(event) => this.props.onPropChange({ Name: event.target.value })}
+            onChange={this.onNameChange}
           />
         </div>
         <div>
           <label>Type</label>
           <input
             value={this.props.restaurant.Type}
-            onChange={(event) => this.props.onPropChange({ Type: event.target.value })}
+            onChange={this.onTypeChange}
           />
         </div>
         <div>
           <label>Phone</label>
           <input
             value={this.props.restaurant.Phone}
-            onChange={(event) => this.props.onPropChange({ Phone: event.target.value })}
+            onChange={this.onPhoneChange}
           />
         </div>
         <div>
           <label>Location</label>
           <LocationSearchInput
             address={this.props.restaurant.address}
-            onAddressChange={(address) => this.props.onPropChange({ address })}
+            onAddressChange={this.onAddressChange}
           />
         </div>
-        <button onClick={(event) => this.props.onUpdate(event, this.props.restaurant)}>Save</button>
-        <button onClick={(event) => this.props.onDelete(event, this.props.restaurant)}>Delete</button>
-        <button onClick={(event) => this.props.onCancel(event, this.props.restaurant)}>Cancel</button>
+        <button onClick={this.onUpdate}>Save</button>
+        <button onClick={this.onDelete}>Delete</button>
+        <button onClick={this.onCancel}>Cancel</button>
       </form>
     </div>
     );
@@ -58,16 +73,13 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onUpdate: (event, restaurant) => {
-      event.preventDefault();
+    onUpdate: (restaurant) => {
       dispatch(updateRestaurant(restaurant))
     },
-    onDelete: (event, restaurant) => {
-      event.preventDefault();
+    onDelete: (restaurant) => {
       dispatch(deleteRestaurant(restaurant))
     },
-    onCancel: (event, restaurant) => {
-      event.preventDefault();
+    onCancel: (restaurant) => {
       dispatch(resetCurrentRestaurant(restaurant))
     },
     onPropChange: (prop) => {

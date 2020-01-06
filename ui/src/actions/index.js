@@ -1,6 +1,13 @@
 import axios from 'axios';
 import { parseData, addressToLocation } from '../utils/geoParser'
 
+export function setVisibilityFilter(data) {
+  return {
+    type: 'SET_VISIBILITY_FILTER',
+    data,
+  };
+}
+
 export function setCurrent(data) {
   return {
     type: 'SET_CURRENT',
@@ -45,6 +52,7 @@ export function changeCurrentRestaurant(data) {
 export function fetchRestaurants() {
   return async function(dispatch) {
     const { data } = await axios.get("api/restaurants/");
+    dispatch(setVisibilityFilter({ filter: '' }));
     dispatch(load(await parseData(data)));
   };
 }
@@ -69,6 +77,14 @@ export function uploadRestaurants(file) {
     const formData = new FormData();
     formData.append('file', file);
     const { data } = await axios.post("api/restaurants/upload", formData)
+    dispatch(setVisibilityFilter({ filter: '' }));
+    dispatch(load(await parseData(data)));
+  };
+}
+
+export function filterRestaurants(keyword) {
+  return async function(dispatch) {
+    const { data } = await axios.get(`api/restaurants/${keyword}`)
     dispatch(load(await parseData(data)));
   };
 }

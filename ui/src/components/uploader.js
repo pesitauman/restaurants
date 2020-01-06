@@ -41,5 +41,5 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-// export default restaurantList;
+
 export default connect(null, mapDispatchToProps)(Uploader);
